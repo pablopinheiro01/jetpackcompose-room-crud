@@ -19,14 +19,14 @@ class ListaContatosActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val contatoDao = HelloAppDatabase.getDatabase(this).contatoDao()
-
-        CoroutineScope(IO).launch {
-//            contatoDao.insere(contatosExemplo.first())
-            val buscaTodos = contatoDao.buscaTodos()
-            Log.i(TAG_LISTA_ACTIVITY, "onCreate: buscando todos os dados")
-            Log.i(TAG_LISTA_ACTIVITY, "onCreate: ${buscaTodos}")
-        }
+//        val contatoDao = HelloAppDatabase.getDatabase(this).contatoDao()
+//
+//        CoroutineScope(IO).launch {
+////            contatoDao.insere(contatosExemplo.first())
+//            val buscaTodos = contatoDao.buscaTodos()
+//            Log.i(TAG_LISTA_ACTIVITY, "onCreate: buscando todos os dados")
+//            Log.i(TAG_LISTA_ACTIVITY, "onCreate: ${buscaTodos}")
+//        }
 
 
         setContent {
