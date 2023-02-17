@@ -9,6 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -35,16 +36,18 @@ class DetalhesContatoViewlModel @Inject constructor(
     private suspend fun carregaContato() {
         idContato?.let {
             val contato = contatoDao.buscaPorId(idContato)
-            contato?.let {
-                with(it) {
-                    _uiState.value = _uiState.value.copy(
-                        id = id,
-                        nome = nome,
-                        sobrenome = sobrenome,
-                        aniversario = aniversario,
-                        telefone = telefone,
-                        fotoPerfil = fotoPerfil
-                    )
+            contato.collect {
+                it?.let {
+                    with(it) {
+                        _uiState.value = _uiState.value.copy(
+                            id = id,
+                            nome = nome,
+                            sobrenome = sobrenome,
+                            aniversario = aniversario,
+                            telefone = telefone,
+                            fotoPerfil = fotoPerfil
+                        )
+                    }
                 }
             }
         }
@@ -52,5 +55,7 @@ class DetalhesContatoViewlModel @Inject constructor(
     }
 
     suspend fun removeContato() {
+
+        idContato?.let { contatoDao.deleta(it) }
     }
 }
