@@ -7,7 +7,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,6 +20,10 @@ class ListaContatosViewModel @Inject constructor(
         get() = _uiState.asStateFlow()
 
     init {
+        buscaTodosContatos()
+    }
+
+    private fun buscaTodosContatos(){
         viewModelScope.launch {
             val contatos = contatoDao.buscaTodos()
 
@@ -31,5 +34,29 @@ class ListaContatosViewModel @Inject constructor(
             }
         }
     }
+
+    fun showPesquisa(){
+        buscaTodosContatos()
+        _uiState.value = _uiState.value.copy(
+            isShowPesquisa = !_uiState.value.isShowPesquisa,
+            textoPesquisa = ""
+        )
+    }
+
+    fun buscaContato(entrada: String) {
+        viewModelScope.launch {
+
+            _uiState.value = _uiState.value.copy(
+                textoPesquisa = entrada
+            )
+
+            contatoDao.buscaContato(entrada).collect{
+                _uiState.value = _uiState.value.copy(
+                    contatos = it,
+                )
+            }
+        }
+    }
+
 
 }

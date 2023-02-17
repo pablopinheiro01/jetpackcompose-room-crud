@@ -26,6 +26,12 @@ fun NavGraphBuilder.homeGraph(
 
             ListaContatosTela(
                 state = state,
+                onClickShowPesquisa = {
+                    viewModel.showPesquisa()
+                },
+                onClickPesquisa = {
+                    viewModel.buscaContato(it)
+                },
                 onClickAbreDetalhes = { idContato ->
                     navController.navegaParaDetalhes(idContato)
                 },

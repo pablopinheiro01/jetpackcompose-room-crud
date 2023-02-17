@@ -1,14 +1,18 @@
 package br.com.alura.helloapp.ui.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,9 +35,21 @@ fun ListaContatosTela(
     onClickDesloga: () -> Unit = {},
     onClickAbreDetalhes: (Long) -> Unit = {},
     onClickAbreCadastro: () -> Unit = {},
+    onClickPesquisa: (String) -> Unit = {},
+    onClickShowPesquisa: () -> Unit = {}
 ) {
     Scaffold(
-        topBar = { AppBarListaContatos(onClickDesloga = onClickDesloga) },
+        topBar = {
+            if (state.isShowPesquisa) {
+                PesquisaDadosTopBar(
+                    textoDePesquisa = state.textoPesquisa,
+                    onClickPesquisa = onClickPesquisa,
+                    onClickShowPesquisa = onClickShowPesquisa
+                )
+            } else {
+                AppBarListaContatos(onClickDesloga = onClickDesloga, onClickShowPesquisa)
+            }
+        },
         floatingActionButton = {
             FloatingActionButton(
                 backgroundColor = MaterialTheme.colors.primary,
@@ -45,7 +61,6 @@ fun ListaContatosTela(
                 )
             }
         }) { paddingValues ->
-
         LazyColumn(modifier.padding(paddingValues)) {
             items(state.contatos) { contato ->
                 ContatoItem(contato) { idContato ->
@@ -57,10 +72,76 @@ fun ListaContatosTela(
 }
 
 @Composable
-fun AppBarListaContatos(onClickDesloga: () -> Unit) {
+fun PesquisaDadosTopBar(
+    textoDePesquisa: String,
+    onClickPesquisa: (String) -> Unit,
+    onClickShowPesquisa: () -> Unit = {},
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier
+            .fillMaxWidth()
+            .background(color = MaterialTheme.colors.background),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        OutlinedTextField(
+            value = textoDePesquisa,
+            onValueChange = { newValue ->
+                onClickPesquisa(newValue)
+            },
+            modifier = modifier
+                .padding(10.dp),
+            shape = RoundedCornerShape(100),
+            leadingIcon = {
+                Icon(Icons.Default.Search, contentDescription = "Icone de Lupa")
+            },
+            label = { Text("Pesquisar") },
+            placeholder = {
+                Text("Digite o nome do contato ...")
+            },
+        )
+        IconButton(
+            onClick = onClickShowPesquisa
+        ) {
+            Icon(
+                imageVector = Icons.Default.Close,
+                tint = Color.Black,
+                contentDescription = "Sair do modo de pesquisa"
+            )
+        }
+
+    }
+}
+
+@Preview
+@Composable
+fun PesquisaDadosTopBarPreview() {
+    HelloAppTheme {
+        PesquisaDadosTopBar(
+            textoDePesquisa = "Clau",
+            onClickPesquisa = {},
+        )
+    }
+}
+
+@Composable
+fun AppBarListaContatos(
+    onClickDesloga: () -> Unit,
+    onClickShowPesquisa: () -> Unit = {},
+) {
     TopAppBar(
         title = { Text(text = stringResource(id = R.string.nome_do_app)) },
         actions = {
+            IconButton(
+                onClick = onClickShowPesquisa
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    tint = Color.White,
+                    contentDescription = stringResource(R.string.pesquisar)
+                )
+            }
             IconButton(
                 onClick = onClickDesloga
             ) {
