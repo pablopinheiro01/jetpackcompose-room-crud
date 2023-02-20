@@ -9,8 +9,6 @@ Feito em Jetpack Compose, o aplicativo utiliza muitas das técnicas mais atuais 
 
 ![compose-room-final](https://user-images.githubusercontent.com/34134071/220201078-5132446c-8d86-453a-9a1e-c6973c6e1024.gif)
 
-***🚧 Trabalho em progresso 🚧***
-
 ## 🏠 Arquitetura
 * Navigation
 * Room Database
