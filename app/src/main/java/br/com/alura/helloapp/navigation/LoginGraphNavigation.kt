@@ -40,6 +40,7 @@ fun NavGraphBuilder.loginGraph(
                 }
             }
 
+
             val dataStore = LocalContext.current.dataStore
             val coroutineScope = rememberCoroutineScope()
 
@@ -57,16 +58,7 @@ fun NavGraphBuilder.loginGraph(
                     navController.navigate(DestinosHelloApp.FormularioLogin.rota)
                 }
             )
-            LaunchedEffect(Unit){
-                coroutineScope.launch {
-                    dataStore.data.collect { preferences ->
-                        val logado = preferences[booleanPreferencesKey(name = "logado")]
-                        if (logado == true) {
-                            navController.navegaLimpo(DestinosHelloApp.HomeGraph.rota)
-                        }
-                    }
-                }
-            }
+
         }
 
         composable(
