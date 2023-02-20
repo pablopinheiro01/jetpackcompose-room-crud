@@ -43,7 +43,6 @@ fun NavGraphBuilder.loginGraph(
                 }
             }
 
-            val dataStore = LocalContext.current.dataStore
             val coroutineScope = rememberCoroutineScope()
 
             LoginTela(
@@ -52,19 +51,7 @@ fun NavGraphBuilder.loginGraph(
 
                     coroutineScope.launch {
                         //executa logica de verificar se o usuario existe na base e seta como logado
-                        dataStore.data.collect { preferences ->
-                            val senha = preferences[SENHA]
-                            val usuario = preferences[USUARIO]
-
-                            if ((usuario == state.usuario) && (senha == state.senha)) {
-                                dataStore.edit {
-                                    it[booleanPreferencesKey("logado")] = true
-                                }
-                                viewModel.tentaLogar()
-                            } else {
-                                state.onErro(true)
-                            }
-                        }
+                        viewModel.tentaLogar()
 
                     }
                 },
@@ -81,7 +68,6 @@ fun NavGraphBuilder.loginGraph(
             val viewModel = hiltViewModel<FormularioLoginViewModel>()
             val state by viewModel.uiState.collectAsState()
 
-            val dataStore = LocalContext.current.dataStore
             val coroutineScope = rememberCoroutineScope()
 
             FormularioLoginTela(
@@ -89,13 +75,7 @@ fun NavGraphBuilder.loginGraph(
                 onSalvar = {
                     //salva novo usuario
                     coroutineScope.launch {
-
-                        dataStore.edit { preferences ->
-                            preferences[USUARIO] =
-                                state.usuario
-                            preferences[SENHA] =
-                                state.senha
-                        }
+                        viewModel.salvarLogin()
                     }
                     navController.navegaLimpo(DestinosHelloApp.Login.rota)
                 }
