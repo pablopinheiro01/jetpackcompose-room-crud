@@ -20,6 +20,7 @@ fun HelloAppNavHost(
         startDestination = DestinosHelloApp.HomeGraph.rota,
         modifier = modifier
     ) {
+        splashGraph(navController)
         loginGraph(navController)
         homeGraph(navController)
         formularioContatoGraph(navController)
